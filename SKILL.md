@@ -21,7 +21,9 @@ Refactoring touches only the target skill's own directory. Never other files, ne
 1. Read the target `SKILL.md` in full, plus any linked `references/`.
 2. Score it against every row in `references/checklist.md` — five sections: Invocation, Structure, Steps, Pruning, Hygiene.
 3. Write the report with `references/report-template.md`: a per-section verdict plus one prioritized fix list.
-4. Stop at gate 1.
+4. *(Optional)* Add a meta-params pass — suggest Claude Code execution tags per
+   `references/optimize-tags.md`, each with a validation test, applied only on approval.
+5. Stop at gate 1.
 
 ## The five checks (full criteria live in references/checklist.md)
 
@@ -45,6 +47,15 @@ layers nobody removed), **sprawl** (every line live but too long — disclose be
 branch), **no-op** (the model already does it by default — cut, or strengthen the leading word),
 **blind-guess** (skill re-derives known live state every run — give it a helper, and inline a small
 `!`…`` live-state block only when output is small/stable).
+
+## Optional: meta-params pass
+
+After the content audit, optionally suggest frontmatter that changes *how the skill runs* —
+invocation mode, `context: fork`, a cheaper `model`, `effort`, and `allowed-tools` (scoped to the
+exact Bash commands the skill runs). These are Claude Code execution config, layered on top of
+Pocock's content spec, not part of it. Full catalog, Bash-scoping syntax, and a validation test per
+tag: `references/optimize-tags.md`. Every tag is a **suggestion** — pair it with its validation test
+and write it only on approval (gate 2).
 
 ## Refactor (only after gate 2)
 

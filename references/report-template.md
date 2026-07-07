@@ -26,6 +26,18 @@
 5. <refactor restatements into leading words>
 
 **Line count:** <before> → <projected after>
+
+### Suggested meta-params (optional — one row per tag that changes something; leave defaults out)
+| Tag | Suggest | Why | Validation test |
+|---|---|---|---|
+| context: fork (+ agent) | yes / no | <verbose output? self-contained task?> | <body has real steps? one run returns a summary?> |
+| model | haiku / sonnet / keep | <how much judgment?> | <run task; still meets completion criteria?> |
+| effort | low / medium / keep | <how hard is the reasoning?> | <run task; quality holds?> |
+| invocation | disable-model-invocation / user-invocable:false / keep | <side effects? background knowledge?> | </context drops desc? /name still works?> |
+| allowed-tools | <Bash(...) patterns> / keep | <runs commands that prompt each time?> | <coverage + least-privilege dry-run: 0 prompts, 0 denials> |
+| <any other field> | ... | ... | ... |
+
+**Nothing here is applied without approval AND a passing validation test.**
 ```
 
 ## Tone
