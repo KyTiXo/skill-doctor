@@ -2,7 +2,7 @@
 
 # 🩺 Skill Doctor
 
-**Five checks. One report. Tags with proof. Refactor only on consent."**
+**Five checks. One report. Tags with proof. Refactor only on consent.**
 
 <br/>
 
