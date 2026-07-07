@@ -1,9 +1,9 @@
 # Meta-params pass — Claude Code execution tags
 
-> Optional pass, run after the content audit. Every tag here is a **suggestion**: pair it
-> with its validation test, and write it only on approval (gate 2). These tune *how* a skill
-> runs, not what it says — Claude Code frontmatter on top of Pocock's content spec, not inside
-> it. Field list current as of `code.claude.com/docs/en/skills` and `/permissions`; re-check there.
+> Opt-in pass — when and how to run: `SKILL.md` § Meta-params pass. This file is the tag catalog
+> + validation tests only. These tune *how* a skill runs, not what it says — Claude Code frontmatter
+> on top of Pocock's content spec, not inside it. Field list current as of `code.claude.com/docs/en/skills`
+> and `/permissions`; re-check there.
 
 The rule mirrors the invocation call in checklist §1: **match the tag to the skill's real
 frequency, risk, and complexity.** A tag that doesn't change behaviour is a no-op — don't add it.
@@ -34,8 +34,13 @@ active model). Turn-scoped: the session model resumes on your next prompt.
 | Simple, mechanical, low-judgment: format conversion, keyword lookup, run-a-script-and-report | Makes design calls, grills, weighs trade-offs, or audits (this doctor itself) |
 | → `haiku` trivial/deterministic, `sonnet` moderate | → judgment is the point; the model spend is the value |
 
-Pair with `effort:` (`low`/`medium`/`high`/`xhigh`/`max`) on the reasoning axis. Caveat: a value
-your org's `availableModels` allowlist excludes is ignored, and the override doesn't persist past the turn.
+Pair with `effort:` (`low`/`medium`/`high`/`xhigh`/`max`) on the reasoning axis — and always pair the
+two: a `model` downgrade with no `effort` cap still runs the cheaper model at the session's effort (e.g.
+`sonnet` at `high`), which is half a fix. **Baseline trap:** with no `effort` tag the skill inherits the
+*user's session effort* (often `high`), NOT `low` — so judge against that, never assume "already low → keep".
+A mechanical skill running at an inherited `high` is over-spend; suggest `effort: low` (or `medium`) and the
+model downgrade together. Caveat: a value your org's `availableModels` allowlist excludes is ignored, and
+the override doesn't persist past the turn.
 
 ### 3. Who invokes? — `disable-model-invocation` / `user-invocable`
 
@@ -52,6 +57,16 @@ Never set both — the skill becomes unreachable (hidden from `/` AND from Claud
 `allowed-tools` pre-approves tools so the skill runs without a prompt each time. It **grants, does
 not restrict** — unlisted tools still follow normal permissions (pair with project `deny` rules if
 blocking is the goal). A skill declaring `allowed-tools` asks for approval once, before first use.
+
+**Weigh it against the profile's frequency, not in the abstract.** The value is prompts-removed × how
+often you run it; the cost is a standing grant someone maintains. A high-frequency skill clears the bar
+easily — that's why a `curl:*` or `git:*` grant is right for tools you fire constantly. A low-frequency
+skill rarely does: the friction removed is a couple of "don't ask again" clicks a session, and interactive
+per-session allowlisting already covers it. Raise the bar further when the grant can't be scoped tight
+(`curl:*` grants all curl to any URL — a URL can't be narrowed via a Bash pattern, §gotchas below) or when
+the command is compound / function-wrapped (`source …; curl … | jq`, or a `pq(){…}` def) so the patterns
+match unreliably and may prompt anyway. None of these is an automatic no — they're the weights. Say which
+way the frequency tips it.
 
 For Bash, scope to the *specific commands the skill runs* — least privilege. Matched against the
 literal command string, shell-operator aware (`foo && bar` needs both sides to match a rule):
@@ -79,7 +94,8 @@ an autonomous loop from calling something like `AskUserQuestion` and stalling.
 ## Validation before approval
 
 Every suggested tag is a proposal, not an edit. Ship each with a concrete validation test; write it
-only after the test passes AND the user approves (gate 2). Suggest → validate → on the nod, set.
+only after the test passes AND the user consents — bulk (`apply the tags`) or cherry-pick (name the rows).
+Suggest → validate → on consent, set.
 
 | Tag | Validation test to offer |
 |---|---|

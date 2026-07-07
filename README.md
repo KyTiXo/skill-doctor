@@ -1,8 +1,8 @@
 <div align="center">
 
-# skill-doctor
+# 🩺 Skill Doctor
 
-[![Typing SVG](https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=500&size=22&duration=3000&pause=1000&color=6E7681&center=true&vCenter=true&width=435&lines=Diagnose+first.;Fix+only+when+you+say+so.)](https://git.io/typing-svg)
+[![Typing SVG](https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=500&size=22&duration=3000&pause=1000&color=6E7681&center=true&vCenter=true&width=435&lines=Five+checks.+One+report.;Refactor+only+on+consent.)](https://git.io/typing-svg)
 
 <br/>
 
@@ -19,9 +19,9 @@
 
 ### What it does
 
-Audits an agent skill against [Matt Pocock's write-a-skill spec](https://github.com/mattpocock/skills), plus the deeper `writing-great-skills` principles used by this skill.
+Audits an agent skill against the [write-a-skill spec](https://github.com/mattpocock/skills) and [`writing-great-skills`](https://github.com/mattpocock/skills) checklist.
 
-It reads the target skill, follows the local checklist, and returns a prioritized fix report. Refactors must be approved by the user.
+It reads the target skill, scores every row in [`references/checklist.md`](references/checklist.md), and returns a prioritized fix report. Refactors require your approval.
 
 </td>
 <td width="50%" valign="top">
@@ -32,30 +32,39 @@ Invoke it against another skill:
 
 ```text
 /skill-doctor audit my-skill
+/skill-doctor audit my-skill with tags
+/skill-doctor audit my-skill include meta-params
 ```
 
 </td>
 </tr>
 </table>
 
+> [!NOTE]
+> Skill Doctor packages Matt Pocock's method from [*Building Great Agent Skills: The Missing Manual*](https://www.youtube.com/watch?v=UNzCG3lw6O0) (AI Engineer) — who-triggers → structure → deletion test, leading words, and the deletion test itself. The approach is his; this repo is the runnable audit skill.
+
 ---
 
 ## Example flow
 
-```text
+```console
 > /skill-doctor audit my-skill
 
-skill-doctor reads the target skill and returns a prioritized report.
+scores checklist → prioritized content report
+footer: Say suggest tags for execution-tag proposals
 
-> Okay, implement the suggestions.
+> Go fix it.
 
-skill-doctor creates SKILL.md.bak-<date>
-skill-doctor applies approved fixes inside the target skill directory.
+backs up SKILL.md → SKILL.md.bak-<date>
+applies approved content fixes
 
-> Suggest execution tags too.
+> Suggest execution tags.
 
-skill-doctor proposes frontmatter like context, model, effort, allowed-tools.
-skill-doctor includes validation tests before anything is written.
+proposes tags + validation tests — still no writes
+
+> Apply the tags.          # or: just fork and allowed-tools
+
+writes approved frontmatter after tests pass
 ```
 
 ---
@@ -95,11 +104,13 @@ Full criteria: [`references/checklist.md`](references/checklist.md)
 
 ---
 
-## Optional: meta-params
+## Meta-params pass (opt-in)
 
-After the content audit, skill-doctor can suggest Claude Code execution tags: invocation mode, `context: fork`, `model`, `effort`, and `allowed-tools` scoped to exact Bash commands.
+Opt-in, default after content refactor. Say `with tags` or `include meta-params` upfront to get tag proposals in the gate-1 report instead.
 
-Every tag is a **proposal with a validation test**. Nothing is written without approval.
+Skill-doctor can suggest Claude Code execution tags per [`references/optimize-tags.md`](references/optimize-tags.md): invocation mode, `context: fork`, `model`, `effort`, and `allowed-tools` scoped to exact Bash commands.
+
+Every tag is a **proposal with a validation test**. Consent is flexible — bulk (`apply the tags`) or cherry-pick (name the rows). Revert via `SKILL.md.bak-<date>` or drop added frontmatter. Preflight patterns with [`scripts/validate-tags.sh`](scripts/validate-tags.sh).
 
 <table>
 <tr>
@@ -111,7 +122,11 @@ Every tag is a **proposal with a validation test**. Nothing is written without a
 <td>Tag catalog, scoping rules, validation tests</td>
 </tr>
 <tr>
-<td><code>scripts/validate-tags.sh</code></td>
+<td><a href="references/meta-params-template.md"><code>references/meta-params-template.md</code></a></td>
+<td>Proposal table for gate-1 (upfront) or post-refactor passes</td>
+</tr>
+<tr>
+<td><a href="scripts/validate-tags.sh"><code>scripts/validate-tags.sh</code></a></td>
 <td>Pre-flight <code>allowed-tools</code> patterns before approving</td>
 </tr>
 </table>
@@ -135,7 +150,19 @@ skill-doctor/
 ├── references/
 │   ├── checklist.md
 │   ├── optimize-tags.md
+│   ├── meta-params-template.md
 │   └── report-template.md
 └── README.md
 ```
 
+[`SKILL.md`](SKILL.md) · [`scripts/validate-tags.sh`](scripts/validate-tags.sh) · [`references/checklist.md`](references/checklist.md) · [`references/optimize-tags.md`](references/optimize-tags.md) · [`references/meta-params-template.md`](references/meta-params-template.md) · [`references/report-template.md`](references/report-template.md)
+
+---
+
+## Credits
+
+Method by **[Matt Pocock](https://mattpocock.com)** — [*Building Great Agent Skills: The Missing Manual*](https://www.youtube.com/watch?v=UNzCG3lw6O0) (AI Engineer).
+
+## License
+
+[MIT](./LICENSE)
