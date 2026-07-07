@@ -2,8 +2,8 @@
 
 > Opt-in pass — when and how to run: `SKILL.md` § Meta-params pass. This file is the tag catalog
 > + validation tests only. These tune *how* a skill runs, not what it says — Claude Code frontmatter
-> on top of Pocock's content spec, not inside it. Field list current as of `code.claude.com/docs/en/skills`
-> and `/permissions`; re-check there.
+> on top of Pocock's content spec, not inside it. Field list lives at `code.claude.com/docs/en/skills`
+> and `/permissions`; re-check there for new fields.
 
 The rule mirrors the invocation call in checklist §1: **match the tag to the skill's real
 frequency, risk, and complexity.** A tag that doesn't change behaviour is a no-op — don't add it.
@@ -106,14 +106,9 @@ Suggest → validate → on consent, set.
 | `disable-model-invocation: true` | After setting, run `/context` and confirm the description is no longer loaded; confirm `/skill-name` still invokes it. |
 | `user-invocable: false` | Confirm it's gone from the `/` menu and Claude still auto-loads it when relevant. |
 
-Command-enumeration helper for the `allowed-tools` check (run from the skill dir):
-```bash
-# candidate commands the skill runs — ! injections in SKILL.md + calls in scripts/
-grep -rhoE '!`[^`]+`' SKILL.md 2>/dev/null | sed 's/^!`//; s/`$//'
-grep -rhoE '\b(git|gh|glab|bun|npm|npx|node|mkdir|cp|mv|curl|jq)\b[^|&;]*' scripts/ 2>/dev/null
-```
-Write the narrowest patterns covering that list. A command with no matching pattern will prompt at
-runtime; a pattern matching nothing in the list is an over-grant — cut it.
+To enumerate the commands a skill runs, use `scripts/validate-tags.sh` — it extracts the `` !` `` injections
+and script calls itself. Write the narrowest patterns covering that list. A command with no matching pattern
+will prompt at runtime; a pattern matching nothing in the list is an over-grant — cut it.
 
 ## Full frontmatter catalog (current)
 
@@ -121,9 +116,6 @@ runtime; a pattern matching nothing in the list is an over-grant — cut it.
 |---|---|---|
 | `name` | Display label in listings; command name usually comes from the folder | Always set explicitly |
 | `description` | What + when; key use case first; `description`+`when_to_use` capped ~1,536 chars | Always |
-| `when_to_use` | Extra trigger phrasing appended to the description | Triggers need spelling out |
-| `argument-hint` | Autocomplete hint, e.g. `[issue-number]` | Skill takes arguments |
-| `arguments` | Named positional args for `$name` substitution | Multi-arg skills |
 | `disable-model-invocation` | `true` = user-only; drops description from context | Side effects, rare, timing-sensitive |
 | `user-invocable` | `false` = Claude-only, hidden from `/` | Background knowledge |
 | `allowed-tools` | Pre-approves tools (no restrict) | Skill runs git/bash/scripts that would prompt |
@@ -132,9 +124,7 @@ runtime; a pattern matching nothing in the list is an over-grant — cut it.
 | `effort` | `low`/`medium`/`high`/`xhigh`/`max` | Dial down simple, up hard |
 | `context` | `fork` = isolated subagent | Verbose, self-contained task skills |
 | `agent` | Subagent type when `context: fork` | Always pair with `fork` |
-| `hooks` | Skill-lifecycle hooks (PreToolUse, etc.) | Deterministic guardrails |
-| `paths` | Globs; auto-activate only on matching files | Scope to a package/filetype |
-| `shell` | `bash` (default) or `powershell` for `` !`cmd` `` | Windows PowerShell |
+| *(other)* | `when_to_use`, `argument-hint`, `arguments`, `hooks`, `paths`, `shell` | Rarely proposed by this pass — see docs |
 
 ## Don't over-tag
 - `allowed-tools` and `hooks` trigger a trust prompt before first use — add only when truly needed.

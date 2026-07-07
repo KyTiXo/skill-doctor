@@ -12,34 +12,38 @@ every tag keys off them (frequency drives `allowed-tools`, risk drives invocatio
 it on repeated-prompt grounds alone. When invoked standalone (no gate-1 audit ran this session), state the
 profile from a fresh read of the skill; don't infer tags without it.
 
-```markdown
+````markdown
 **Profile:** <frequency> · <risk> · <judgment> — <one clause tying it together>.
 
 **Recommend: <tag: value>[ + <tag: value>]**
 
 Why: <one-line why>
 Validate: <the test to run before writing it>.
-[repeat one indented block per recommended tag — usually 0-2]
+[repeat one block per recommended tag — usually 0-2]
 
-Skipped (no-op / net-negative): <tag>, <tag>, <tag> — <one clause each, or shared reason>.
+**Skipped (no-op / net-negative):** <tag>, <tag>, <tag> — <one clause each, or shared reason>.
+
+### Suggested final frontmatter
+
+```diff
+ name: <name>
+ description: <first ~60 chars of the existing description>… (unchanged)
++<tag>: <value>
 ```
 
-After that provide what the final version would look like for the code box of the skill.
+_Nothing is written without consent — say `apply the tags`, or name the ones you want. Each runs its validation test first._
+````
 
-Suggested tags:
-```markdown
-<hr>
-name: <name>
-description: <description>
-<tag: value>
-<hr>
-```
+Rules for the frontmatter diff:
+- `+` lines are the proposal. They must be verbatim, copy-pasteable YAML — no bold, no ellipsis, no
+  parenthetical annotations, no `**key**` styling.
+- Context lines (leading space) are the skill's *existing* frontmatter; long values may be truncated
+  with `…` since nobody pastes them.
+- Only fields that already exist in the target skill or earned a Recommend block above may appear.
+  Never invent a field (`version`, etc.) to pad the block.
 
 Rules:
 - A tag earns a Recommend block only if it changes behaviour (the no-op test, checklist §4). Everything else
   is a skip-line word, never a row.
 - Model + effort travel together (optimize-tags.md §2): recommend both or neither.
 - If nothing earns a block, say so in one line — "No tags earn their place; defaults are correct" — and stop.
-
-**Nothing is written without consent — `apply the tags`, or name the ones you want. Each runs its validation test first.**
-```

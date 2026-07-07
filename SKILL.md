@@ -21,24 +21,14 @@ Refactoring touches only the target skill's own directory. Never other files, ne
 1. Read the target `SKILL.md` in full, plus any linked `references/`.
 2. Score it against every row in `references/checklist.md` — five sections: Invocation, Structure, Steps, Pruning, Hygiene.
 3. Write the gate-1 report via `references/report-template.md` (content only).
-   End with: _Say `suggest tags` for execution-tag proposals._
    Exception: user said `with tags` or `include meta-params` upfront → also fill
    `references/meta-params-template.md` in the report (propose only, no writes).
 4. Stop at gate 1 — change nothing.
 
-## The five checks (full criteria live in references/checklist.md)
+## The five checks
 
-- **Invocation** — model- vs user-invoked chosen on purpose; description is third person, ≤1024 chars,
-  "what it does" + "Use when [triggers]", one trigger per branch, leading word front-loaded.
-- **Structure** — `SKILL.md` under 100 lines; body is only steps + reference; branch-only reference
-  pushed to a linked file, one level deep; a concept's rules co-located under one heading.
-- **Steps** — each step ends on a *checkable* completion criterion, exhaustive where it matters
-  ("every model accounted for", not "make a list").
-- **Pruning** — one source of truth per meaning; run the no-op test sentence by sentence and delete whole
-  sentences that fail; upgrade weak leading words (`be thorough` → `relentless`) rather than cut them.
-- **Hygiene** — no time-sensitive info, consistent terminology, concrete examples, scripts only for
-  deterministic/repeated work with real error handling; a repeated discovery call becomes a helper the
-  model runs on demand, promoted to an inline `!`…`` live-state block only when its output is small + stable.
+Invocation · Structure · Steps · Pruning · Hygiene. Full criteria live in `references/checklist.md` —
+score every row from that file, never from memory.
 
 ## Failure-mode lookup
 
@@ -47,9 +37,8 @@ Name the smell when you find it: **premature completion**, **duplication**, **se
 
 ## Refactor (only after gate 2)
 
-Back up first: `cp SKILL.md SKILL.md.bak-<date>`. Then apply the fix list in order: push reference out >
-tighten description / fix invocation > collapse duplication > delete no-ops > refactor restatements into
-leading words. Re-check the line count and grep the leading words to confirm nothing got lost in the move.
+Back up first: `cp SKILL.md SKILL.md.bak-<date>`. Then apply the report's prioritized fix list in order.
+Re-check the line count and grep the leading words to confirm nothing got lost in the move.
 
 ## Meta-params pass (opt-in — default after gate 2)
 

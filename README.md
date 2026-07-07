@@ -2,7 +2,7 @@
 
 # 🩺 Skill Doctor
 
-[![Typing SVG](https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=500&size=22&duration=3000&pause=1000&color=6E7681&center=true&vCenter=true&width=435&lines=Five+checks.+One+report.;Refactor+only+on+consent.)](https://git.io/typing-svg)
+**Five checks. One report. Refactor only on consent.**
 
 <br/>
 
@@ -66,6 +66,16 @@ proposes tags + validation tests — still no writes
 
 writes approved frontmatter after tests pass
 ```
+
+### What the report looks like
+
+<!-- regen: cd docs && freeze --execute "glow -s dark -w 100 ex-report-safe.md" --config full -o report.png -->
+<img src="images/report.png" width="780" alt="skill-doctor gate-1 audit report">
+
+### And the tag proposal
+
+<!-- regen: cd docs && freeze --execute "glow -s dark -w 100 ex-tags.md" --config full -o tags.png -->
+<img src="images/tags.png" width="780" alt="skill-doctor tag proposal">
 
 ---
 
@@ -154,8 +164,6 @@ skill-doctor/
 │   └── report-template.md
 └── README.md
 ```
-
-[`SKILL.md`](SKILL.md) · [`scripts/validate-tags.sh`](scripts/validate-tags.sh) · [`references/checklist.md`](references/checklist.md) · [`references/optimize-tags.md`](references/optimize-tags.md) · [`references/meta-params-template.md`](references/meta-params-template.md) · [`references/report-template.md`](references/report-template.md)
 
 ---
 
